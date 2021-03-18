@@ -1,22 +1,23 @@
 import jieba
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-
+import json
 
 class TextAnalyser(object):
     """
-    # 基于jieba分词的文本分析器对象类
+    ## 基于jieba分词的文本分析器对象类
     """
 
     def __init__(self, text_filename):
         self.txt_filename = text_filename
         self.ignore_list = []
+        self.syno_dict = {}
         self.cloud_material = ""
         self.word_dict = {}  # 用字典统计每个词的出现次数
 
     def set_ignore_list(self, ignore_config_file='ignore_list.txt') -> list:
         """
-        # set_ignore_list
+        ## set_ignore_list
         从配置文件中读取信息，设定 ignore_list ，以便更好地获取分词结果
         """
         with open(ignore_config_file, 'r') as f:
@@ -25,13 +26,17 @@ class TextAnalyser(object):
 
     def set_syno_dict(self):
         """
-        # set_syno_list
-        设定同义词列表，从而实现合并
+        ## set_syno_list
+        设定同义词列表，从而实现语词的同义合并
         """
+        with open('syno_dict.json', 'r', encoding='utf-8') as f:
+            self.syno_dict = json.load(f)
+
 
     def analyse(self, content, minlen=2, maxlen=10):
         """
-        docstring
+        ## analyse
+        用于将输入的字符串进行有效的分词与
         """
         # 分词
         word_list = jieba.lcut(content)
@@ -43,21 +48,26 @@ class TextAnalyser(object):
             # 跳过不想统计的词
             if w in self.ignore_list:
                 continue
+            
+            if w in self.syno_dict:
+                w = self.syno_dict[w]
 
             # 已在字典中的词，将出现次数增加1；否则，添加进字典，次数记为1
             self.word_dict[w] = self.word_dict.get(w, 0) + 1
             # 将符合分词目标的词筛选出来作为词云素材
             self.cloud_material = self.cloud_material + " " + w
 
-    def start(self, minlen=2, maxlen=10, bigfile=False, ignore=True, show=True):
+    def start(self, minlen=2, maxlen=10, bigfile=False, ignore=True, syno=True, show=True):
         """
-        # start
-        基于已设定参数
+        ## start
+        基于已设定参数启动文本分析功能
         """
         self.minlen = minlen
         self.maxlen = maxlen
         if ignore:
             self.set_ignore_list()
+        if syno:
+            self.set_syno_dict()
 
         if bigfile:
             with open(self.txt_filename, 'r', encoding='utf-8') as f:
@@ -107,7 +117,7 @@ class TextAnalyser(object):
         total_num = len(items_list)
         print('经统计，共有' + str(total_num) + '个不同的词')
         # 根据用户需求，打印排名前列的词，同时把统计结果存入文件
-        num = input('您想查看前多少个词语？[10]:')
+        num = input('您想查看前多少个词语？[10]: ')
         if not num.isdigit() or num == '':  # 如果输入的不全是数字，或者直接按了回车
             num = 10  # 设成查看前10名
         else:
@@ -115,10 +125,10 @@ class TextAnalyser(object):
 
         with open(result_filename, 'w') as f:  # 新建结果文件
             f.write('词语, 词频\n')  # 写入标题行
-
+            print('位次\t词语\t\t词频')
             for i in range(num):
                 word, cnt = items_list[i]
-                message = str(i+1) + '. ' + word + '\t' + str(cnt)
+                message = str(i+1) + '\t' + word + '\t\t' + str(cnt)
                 print(message)
                 f.write(word + ',' + str(cnt) + '\n')
 
@@ -126,5 +136,5 @@ class TextAnalyser(object):
 
 
 if __name__ == "__main__":
-    analyser = TextAnalyser('./srt/raw.txt')
+    analyser = TextAnalyser('raw2.txt')
     analyser.start()
