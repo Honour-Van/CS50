@@ -2,28 +2,18 @@ import jieba
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
+
 class TextAnalyser(object):
     """
-    # 基于jieba分词的文本分析器类
+    # 基于jieba分词的文本分析器对象类
     """
+
     def __init__(self, text_filename):
         self.txt_filename = text_filename
         self.ignore_list = []
-        self.minlen = 2
-        self.maxlen = 100
-
         self.cloud_material = ""
-        self.word_dict = {} # 用字典统计每个词的出现次数
+        self.word_dict = {}  # 用字典统计每个词的出现次数
 
-
-    def set_len_range(self, minlen, maxlen):
-        """
-        # set_len_range
-        设定分词筛选长度，获取制定长度区间的词语结果
-        """
-        self.minlen=minlen
-        self.maxlen=maxlen
-        
     def set_ignore_list(self, ignore_config_file='ignore_list.txt') -> list:
         """
         # set_ignore_list
@@ -32,14 +22,14 @@ class TextAnalyser(object):
         with open(ignore_config_file, 'r') as f:
             self.ignore_list = f.readline().strip()
         return self.ignore_list
-    
+
     def set_syno_dict(self):
         """
         # set_syno_list
         设定同义词列表，从而实现合并
         """
-        
-    def analyse(self, content):
+
+    def analyse(self, content, minlen=2, maxlen=10):
         """
         docstring
         """
@@ -47,37 +37,46 @@ class TextAnalyser(object):
         word_list = jieba.lcut(content)
 
         for w in word_list:
-            # 跳过单字
-            if not self.minlen <= len(w) <= self.maxlen:
+            # 选出合适长度的
+            if not minlen <= len(w) <= maxlen:
                 continue
-            
             # 跳过不想统计的词
             if w in self.ignore_list:
                 continue
 
             # 已在字典中的词，将出现次数增加1；否则，添加进字典，次数记为1
             self.word_dict[w] = self.word_dict.get(w, 0) + 1
-
+            # 将符合分词目标的词筛选出来作为词云素材
             self.cloud_material = self.cloud_material + " " + w
 
-        
-    def readfile(self, bigfile=False):
+    def start(self, minlen=2, maxlen=10, bigfile=False, ignore=True, show=True):
         """
-        docstring
+        # start
+        基于已设定参数
         """
+        self.minlen = minlen
+        self.maxlen = maxlen
+        if ignore:
+            self.set_ignore_list()
+
         if bigfile:
-            pass
+            with open(self.txt_filename, 'r', encoding='utf-8') as f:
+                for line in f:
+                    self.analyse(line)
         else:
             # 从文件读取文本
             txt_file = open(self.txt_filename, 'r', encoding='utf-8')
             content = txt_file.read()
             txt_file.close()
-
-
+            self.analyse(content)
+        if show:
+            self.get_result()
+            self.get_wordcloud()
 
     def get_wordcloud(self):
         """
-        docstring
+        # get_wordcloud
+        获得词云
         """
         wordcloud = WordCloud(
             # 生成中文字的字体,必须要加,不然看不到中文
@@ -91,13 +90,15 @@ class TextAnalyser(object):
 
         plt.gca().xaxis.set_major_locator(plt.NullLocator())
         plt.gca().yaxis.set_major_locator(plt.NullLocator())
-        plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, hspace = 0, wspace = 0)
-        plt.margins(0,0)
+        plt.subplots_adjust(top=1, bottom=0, right=1,
+                            left=0, hspace=0, wspace=0)
+        plt.margins(0, 0)
         plt.savefig('./wordcloud.png', bbox_inches='tight')
-        
+
     def get_result(self, result_filename='./output.csv'):
         """
-        docstring
+        # get_result
+        打印结果，并输出到csv文件当中
         """
         # 把字典转成列表，并按原先“键值对”中的“值”从大到小排序
         items_list = list(self.word_dict.items())
@@ -126,3 +127,4 @@ class TextAnalyser(object):
 
 if __name__ == "__main__":
     analyser = TextAnalyser('./srt/raw.txt')
+    analyser.start()
