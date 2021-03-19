@@ -1,11 +1,15 @@
+from os import name
 import jieba
+import jieba.posseg as pseg
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import json
 
+
 class TextAnalyser(object):
     """
     ## 基于jieba分词的文本分析器对象类
+
     """
 
     def __init__(self, text_filename):
@@ -32,14 +36,24 @@ class TextAnalyser(object):
         with open('syno_dict.json', 'r', encoding='utf-8') as f:
             self.syno_dict = json.load(f)
 
-
-    def analyse(self, content, minlen=2, maxlen=10):
+    def analyse(self, content, minlen=2, maxlen=10, nr=False):
         """
         ## analyse
         用于将输入的字符串进行有效的分词与
         """
         # 分词
+        print("word cutting...")
         word_list = jieba.lcut(content)
+        if len(word_list):
+            print("word cutting finished")
+
+        if nr:
+            print("word tagging...")
+            psg_dict = dict(pseg.lcut(content))
+            if len(psg_dict):
+                print("word tagging finished")
+            minlen = 2
+            maxlen = 3
 
         for w in word_list:
             # 选出合适长度的
@@ -48,22 +62,27 @@ class TextAnalyser(object):
             # 跳过不想统计的词
             if w in self.ignore_list:
                 continue
-            
+
             if w in self.syno_dict:
                 w = self.syno_dict[w]
+
+            if nr:
+                if w in psg_dict:
+                    if psg_dict[w] != 'nr':
+                        continue
+                else:
+                    continue
 
             # 已在字典中的词，将出现次数增加1；否则，添加进字典，次数记为1
             self.word_dict[w] = self.word_dict.get(w, 0) + 1
             # 将符合分词目标的词筛选出来作为词云素材
             self.cloud_material = self.cloud_material + " " + w
 
-    def start(self, minlen=2, maxlen=10, bigfile=False, ignore=True, syno=True, show=True):
+    def start(self, minlen=2, maxlen=10, bigfile=False, ignore=True, syno=True, show=True, nameren=False):
         """
         ## start
         基于已设定参数启动文本分析功能
         """
-        self.minlen = minlen
-        self.maxlen = maxlen
         if ignore:
             self.set_ignore_list()
         if syno:
@@ -72,13 +91,14 @@ class TextAnalyser(object):
         if bigfile:
             with open(self.txt_filename, 'r', encoding='utf-8') as f:
                 for line in f:
-                    self.analyse(line)
+                    self.analyse(line, minlen=minlen,
+                                 maxlen=maxlen, nr=nameren)
         else:
             # 从文件读取文本
             txt_file = open(self.txt_filename, 'r', encoding='utf-8')
             content = txt_file.read()
             txt_file.close()
-            self.analyse(content)
+            self.analyse(content, minlen=minlen, maxlen=maxlen, nr=nameren)
         if show:
             self.get_result()
             self.get_wordcloud()
@@ -136,5 +156,5 @@ class TextAnalyser(object):
 
 
 if __name__ == "__main__":
-    analyser = TextAnalyser('raw2.txt')
-    analyser.start()
+    analyser = TextAnalyser('./raw2.txt')
+    analyser.start(nameren=True)
