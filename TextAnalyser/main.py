@@ -180,5 +180,5 @@ class TextAnalyser(object):
 
 
 if __name__ == "__main__":
-    analyser = TextAnalyser('./raw2.txt')
+    analyser = TextAnalyser('./红楼梦.txt')
     analyser.start(nameren=True)
