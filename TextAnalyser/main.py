@@ -1,3 +1,8 @@
+'''
+a Text Analyser based on jieba
+@code: by 范皓年 1900012739 电子学系
+'''
+
 from os import name
 import jieba
 import jieba.posseg as pseg
@@ -9,10 +14,19 @@ import json
 class TextAnalyser(object):
     """
     ## 基于jieba分词的文本分析器对象类
-
+    构建对象之后，调用其start函数即可开始运行
     """
 
     def __init__(self, text_filename):
+        '''
+        ## 构造函数
+        @param 
+        @ text_filename：待分析的文件名称
+        @ ignore_list：需要忽略的无实意词语
+        @ syno_dict：需要替换的同义词词典
+        @ cloud_material: 用于生成词云的长字符串
+        @ word_dict: 各分词的词频保存在此
+        '''
         self.txt_filename = text_filename
         self.ignore_list = []
         self.syno_dict = {}
@@ -39,7 +53,10 @@ class TextAnalyser(object):
     def analyse(self, content, minlen=2, maxlen=10, nr=False):
         """
         ## analyse
-        用于将输入的字符串进行有效的分词与
+        用于将输入的字符串进行有效的分词与过滤
+        @param
+        @ minlen & maxlen：满足条件的词语的字数
+        @ nr：是否启动人名模式
         """
         # 分词
         print("word cutting...")
@@ -82,6 +99,13 @@ class TextAnalyser(object):
         """
         ## start
         基于已设定参数启动文本分析功能
+        @param
+        @ minlen & maxlen：最小最大字长
+        @ bigfile：是否启动大文件读取模式
+        @ ignore：是否弃用忽略列表
+        @ syno：是否弃用同义词替换
+        @ show：是否呈现结果
+        @ nameren：是否弃用人名模式
         """
         if ignore:
             self.set_ignore_list()
