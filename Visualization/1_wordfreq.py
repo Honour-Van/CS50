@@ -44,6 +44,7 @@ del wordfreq_list[0]  # 删除csv文件中的标题行
             title_textstyle_opts=opts.TextStyleOpts(font_size=23)
         ),
         tooltip_opts=opts.TooltipOpts(is_show=True),
+        toolbox_opts=opts.ToolboxOpts()
     )
     .render("./out/wordcloud.html")
 )
@@ -60,7 +61,8 @@ ydata = [y[1] for y in wordfreq_list[:10]]
     .set_global_opts(
         title_opts=opts.TitleOpts(
             title="词频统计", 
-            subtitle="以红楼梦为例")
+            subtitle="以红楼梦为例"),
+        toolbox_opts=opts.ToolboxOpts()
     )
     .render('./out/bar.html')
 )
@@ -95,6 +97,7 @@ ydata = [y[1] for y in wordfreq_list[:10]]
                 linestyle_opts=opts.LineStyleOpts(opacity=0)
             ),
         ),
+        toolbox_opts=opts.ToolboxOpts(),
     )
     .render("./out/pictorialbar.html")
 )
