@@ -1,9 +1,16 @@
-from pyecharts.charts import WordCloud
-from pyecharts.charts.basic_charts.wordcloud import gen_color
-from pyecharts.charts import Bar
-from pyecharts.charts import PictorialBar
-from pyecharts.globals import SymbolType
+"""
+@file: wordfreq.py
+@author: 范皓年 1900012739
+@description: 
+    可视化作业1：利用三种图形进行词频可视化
+    基于之前在文本分析中得到的结果，
+    我们这里利用柱形图、词云图和象形柱状图进行数据可视化
+"""
+
+from pyecharts.charts import WordCloud, Bar, PictorialBar, Tab
+from pyecharts.globals import SymbolType, ThemeType
 import pyecharts.options as opts
+import os
 
 # -------从文件中读出人物词频------------------
 src_filename = './assets/红楼梦词频.csv'
@@ -21,32 +28,34 @@ for line in line_list:
     line_split = line.split(',')  # 以逗号作为标志，把字符串切分成词，存在列表中
     wordfreq_list.append((line_split[0], line_split[1]))
 
-# print(wordfreq_list)
+# print(wordfreq_list)  # 检查读入数据的情况
 
 del wordfreq_list[0]  # 删除csv文件中的标题行
 # -------从文件中读出人物词频完成------------------
 
 # -------绘制词频的词云图----------------------
-(
-    WordCloud()
-    .add(series_name="词频分析", 
-        data_pair=wordfreq_list[:100], 
-        word_size_range=[6, 66], 
-        shape='roundRect',
-        height=800,
-        width=1200,
-        pos_left=0
+wordcloud = (
+    WordCloud(
+        init_opts=opts.InitOpts(
+            theme=ThemeType.INFOGRAPHIC,
+            page_title='红楼梦词云'
         )
+    )
+    .add(series_name="词频分析",
+         data_pair=wordfreq_list[:100],
+         word_size_range=[6, 66],
+         shape='roundRect',
+
+         )
     .set_global_opts(
         title_opts=opts.TitleOpts(
             title="词频分析",
-            subtitle="以红楼梦为例", 
+            subtitle="以红楼梦为例",
             title_textstyle_opts=opts.TextStyleOpts(font_size=23)
         ),
         tooltip_opts=opts.TooltipOpts(is_show=True),
         toolbox_opts=opts.ToolboxOpts()
     )
-    .render("./out/wordcloud.html")
 )
 
 # --------绘制词云图完成----------------------
@@ -54,24 +63,32 @@ del wordfreq_list[0]  # 删除csv文件中的标题行
 # -------绘制词频的柱形图----------------------
 xdata = [x[0] for x in wordfreq_list[:10]]
 ydata = [y[1] for y in wordfreq_list[:10]]
-(
-    Bar()
+bar = (
+    Bar(
+        init_opts=opts.InitOpts(
+            theme=ThemeType.DARK,
+        )
+    )
     .add_xaxis(xdata)
     .add_yaxis("词频", ydata, color='darkblue')
     .set_global_opts(
         title_opts=opts.TitleOpts(
-            title="词频统计", 
+            title="词频统计",
             subtitle="以红楼梦为例"),
         toolbox_opts=opts.ToolboxOpts()
     )
-    .render('./out/bar.html')
 )
 
 # --------绘制柱形图完成----------------------
 
-
-(
-    PictorialBar()
+# --------绘制象形柱状图----------------------
+pictorialbar = (
+    PictorialBar(
+        init_opts=opts.InitOpts(
+            theme=ThemeType.WONDERLAND,
+            page_title='红楼梦词频象形柱状图'
+        )
+    )
     .add_xaxis(xdata)
     .add_yaxis(
         "",
@@ -99,14 +116,21 @@ ydata = [y[1] for y in wordfreq_list[:10]]
         ),
         toolbox_opts=opts.ToolboxOpts(),
     )
-    .render("./out/pictorialbar.html")
 )
+# --------象形柱形图完成----------------------
 
+# --------将几个图片绘制到同一个tab中---------
+(
+    Tab(page_title='红楼梦词频分析')
+    .add(bar, "词频柱形图")
+    .add(wordcloud, "词云图")
+    .add(pictorialbar, "象形柱状图")
+    .render('./out/wordfreq.html')
+)
+# --------tab绘制完成-----------------------
 
-import os
+# 尝试直接利用chrome打开html文件
 try:
-    os.system('start chrome ./out/wordcloud.html')
-    os.system('start chrome ./out/bar.html')
-    os.system('start chrome ./out/pictorialbar.html')
+    os.system('start chrome ./out/wordfreq.html')
 except:
-    print("Chrome Open Error")
+    print("Chrome Error")
