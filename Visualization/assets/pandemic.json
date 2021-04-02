@@ -1,0 +1,42 @@
+{
+    "United States": {
+        "population": 318892103,
+        "confirmed": 30613592
+    },
+    "China": {
+        "population": 1400077000,
+        "confirmed": 90159
+    },
+    "Japan": {
+        "population": 127103388,
+        "confirmed": 474773
+    },
+    "Germany": {
+        "population": 82293457,
+        "confirmed": 2809510
+    },
+    "India": {
+        "population": 1236344631,
+        "confirmed": 12149335
+    },
+    "United Kingdom": {
+        "population": 66573504,
+        "confirmed": 4345788
+    },
+    "France": {
+        "population": 65233271,
+        "confirmed": 4644423
+    },
+    "Italy": {
+        "population": 60482200,
+        "confirmed": 3584899
+    },
+    "Brazil": {
+        "population": 202656788,
+        "confirmed": 12748747
+    },
+    "Canada": {
+        "population": 18877765,
+        "confirmed": 982116
+    }
+}
