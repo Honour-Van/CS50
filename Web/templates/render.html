@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>排名</title>
+    <style>
+        th {
+            border: 1px solid;
+            width: 100px;
+        }
+
+        td {
+            width: 100px;
+            height: auto;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            border: 1px solid;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    排序方式：</br>
+    <input type="radio" name="basis">姓名
+    <input type="radio" name="basis">平时成绩
+    <input type="radio" name="basis">期中成绩
+    <input type="radio" name="basis">期末成绩
+    <input type="radio" name="basis">总成绩
+    </br>
+    <input type="radio" name='order'>升序
+    <input type="radio" name="order">降序
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>平时成绩</th>
+            <th>期中成绩</th>
+            <th>期末成绩</th>
+            <th>总成绩</th>
+            <th>可视</th>
+        </tr>
+        {{row|safe}}
+    </table>
+</body>
+
+</html>
