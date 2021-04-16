@@ -80,3 +80,87 @@ https://blog.csdn.net/newborn2012/article/details/17289345
 
 flask和html中js脚本的交互，注意，网址虽然是大小写不敏感的，但是在写接口的时候是敏感的。
 
+
+#### 拼音排名
+使用xpinyin模块
+
+dataframe列改名
+
+### 补充内容
+尝试将df传到前端进行处理
+
+#### 将json对象传递到前端
+**https://www.cnblogs.com/lazyboy1/p/5015111.html**
+
+采用了其中的方法5，但是模板中的替代数据是字符串即可。
+
+然后是排序，**https://www.jianshu.com/p/92c3bf42a7b1**
+
+排序在点击按钮的时候扫描得出模式，然后进行排序。
+
+![image-20210416223018697](D:\cs50\Web\README.assets\image-20210416223018697.png)
+
+预估是table的html代码发生了问题。观察如下：
+
+![image-20210416233457791](D:\cs50\Web\README.assets\image-20210416233457791.png)
+
+查找资料，我们发现这是因为jquery会自动生成tbody，将加入的tr直接加入进去。这时候如果按照如下代码分次加入，则会使得空的tr被提取到tbody中。
+
+```javascript
+$.each(data, function (index, value) {
+    $("table").append("<tr id='rd'>");
+    $("table").append(`<td>${value.name}</td>`);
+    $("table").append(`<td>${value.平时成绩}</td>`);
+    $("table").append(`<td>${value.期中成绩}</td>`);
+    $("table").append(`<td>${value.期末成绩}</td>`);
+    $("table").append(`<td>${value.总成绩}</td>`);
+    if (basis !== "姓名") {
+        var vis = value[basis];
+        var color = choose_color(vis);
+        $("table").append(`<td><div class='stateDiv' style='background:${color}; width:${vis}px;'></div></td></tr>`);
+    }
+    $("table").append('</tr>');
+});
+```
+
+因而我们可以通过一次性添加的方式来解决这个问题：
+
+```javascript
+$.each(data, function (index, value) {
+    rowdata = `<tr id='rd'><td>${value.name}</td><td>${value.平时成绩}</td><td>${value.期中成绩}</td><td>${value.期末成绩}</td><td>${value.总成绩}</td>`
+    if (basis !== "姓名") {
+        var vis = value[basis];
+        var color = choose_color(vis);
+        rowdata += `<td><div class='stateDiv' style='background:${color}; width:${vis}px;'></div></td></tr>`;
+    }
+    rowdata += '</tr>';
+    $("table").append(rowdata);
+});
+```
+
+问题显然已经得到了解决：
+
+![image-20210416234624147](D:\cs50\Web\README.assets\image-20210416234624147.png)
+
+
+
+当然我们也可以自己编写tbody来避免这个问题。这篇博客https://blog.csdn.net/wangdabin_1216/article/details/8206043给出的方法是写全tbody，减小不确定性。
+
+```javascript
+function add(udata){$("table tbody").append(udata);}
+add("<tr id='rd'>");
+add(`<td>${value.name}</td>`);
+add(`<td>${value.平时成绩}</td>`);
+add(`<td>${value.期中成绩}</td>`);
+add(`<td>${value.期末成绩}</td>`);
+add(`<td>${value.总成绩}</td>`);
+if (basis !== "姓名") {
+    var vis = value[basis];
+    var color = choose_color(vis);
+    add(`<td><div class='stateDiv' style='background:${color}; width:${vis}px;'></div></td></tr>`);
+}
+add('</tr>');
+
+```
+
+为了避免更多次修改source代码，这种方法不一定是更好的，但不犯懒，去定义tbody一定是没错的。

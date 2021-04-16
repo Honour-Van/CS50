@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>排名</title>
+    <style>
+        th {
+            border: 1px solid;
+            width: 100px;
+        }
+
+        td {
+            width: 100px;
+            height: auto;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            border: 1px solid;
+            margin: auto;
+        }
+
+        .stateDiv {
+            height: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>默认按总成绩降序</h1>
+    排序方式：
+    </br>
+    <input type="radio" name="basis" id="姓名">姓名
+    <input type="radio" name="basis" id="平时成绩">平时成绩
+    <input type="radio" name="basis" id="期中成绩">期中成绩
+    <input type="radio" name="basis" id="期末成绩">期末成绩
+    <input type="radio" name="basis" id="总成绩">总成绩
+    </br>
+    <input type="radio" name='order' id='1'>升序
+    <input type="radio" name="order" id='0'>降序
+    </br>
+    <button id="btn1">确定</button>
+    </br>
+
+    <table>
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>平时成绩</th>
+                <th>期中成绩</th>
+                <th>期末成绩</th>
+                <th>总成绩</th>
+                <th>可视</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        stu_data = eval('{{data|safe}}');
+        $("#btn1").click(function () {
+            var basis = $("[name='basis']").filter(":checked").attr("id");
+            var ascending = $("[name='order']").filter(":checked").attr("id");
+            data = mysort(stu_data, basis, ascending);
+            $("tr").remove("#rd");
+            console.log($("table"));
+            $.each(data, function (index, value) {
+                rowdata = `<tr id='rd'><td>${value.name}</td><td>${value.平时成绩}</td><td>${value.期中成绩}</td><td>${value.期末成绩}</td><td>${value.总成绩}</td>`
+                if (basis !== "姓名") {
+                    var vis = value[basis];
+                    var color = choose_color(vis);
+                    rowdata += `<td><div class='stateDiv' style='background:${color}; width:${vis}px;'></div></td></tr>`;
+                }
+                rowdata += '</tr>';
+                $("table tbody").append(rowdata);
+
+                if (ascending == '1') {
+                    $('title').text('按' + basis + '升序');
+                    $('h1').text('按' + basis + '升序');
+                }
+                else {
+                    $('title').text('按' + basis + '降序');
+                    $('h1').text('按' + basis + '降序');
+                }
+            });
+        });
+
+        function mysort(array, key, asd) {
+            return array.sort(function (a, b) {
+                var x = a[key]; var y = b[key];
+                res = ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                if (asd == "1") { return res; }
+                return -1 * res;
+            });
+        }
+        function choose_color(vis) {
+            return ((vis >= 85) ? "Green" : ((vis >= 60) ? "Yellow" : "Red"));
+        };
+    </script>
+
+</body>
+
+</html>
