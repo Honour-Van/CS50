@@ -19,18 +19,38 @@ def choose_color(grade):
         return 'Red'
 
 
+def draw_table(df: pd.DataFrame, sortby:str) -> str:
+    rowdata = ''
+    for _, row in df.iterrows():
+        rowunit = f"<tr id='rd'><td>{row['姓名']}</td><td>{row['平时成绩']}</td><td>{row['期中成绩']}</td><td>{row['期末成绩']}</td><td>{row['总成绩']}</td>"
+        if sortby == "姓名":
+            rowdata += rowunit
+            rowdata += '</tr>'
+        else:
+            vis = row[sortby]
+            color = choose_color(vis)
+            rowunit += f"<td><div class='stateDiv' style='background:{color}; width:{vis}px;'></div></td></tr>"
+            rowdata += rowunit
+    return rowdata
+
+
 app = Flask(__name__)
 
 
 @app.route("/")
 def root():
     df1 = read_data().sort_values(by="总成绩", ascending=False)
-    rowdata = ''
-    for _, row in df1.iterrows():
-        color = choose_color(row['总成绩'])
-        rowunit = f"<tr><td>{row['姓名']}</td><td>{row['平时成绩']}</td><td>{row['期中成绩']}</td><td>{row['期末成绩']}</td><td>{row['总成绩']}</td><td><div class='stateDiv' style='background:{color}; width:{row['总成绩']}px; height: 20px;'></div></td></tr>"
-        rowdata += rowunit
+    rowdata = draw_table(df1,"总成绩")
     return render_template('render.html', row=rowdata)
+
+
+@app.route("/sortby", methods=("post",))
+def sortBy():
+    sb = request.form["Basis"]
+    asd = int(request.form["Ascending"])
+    df2 = read_data().sort_values(by=sb, ascending=asd)
+    rowdata = draw_table(df2,sb)
+    return rowdata
 
 
 if __name__ == "__main__":

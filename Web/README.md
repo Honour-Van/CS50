@@ -75,3 +75,8 @@ dataframe排序：**https://blog.csdn.net/houyanhua1/article/details/87804111**
 
 排序之后，利用Python生成HTML表格代码
 
+#### 网页radio获取
+https://blog.csdn.net/newborn2012/article/details/17289345
+
+flask和html中js脚本的交互，注意，网址虽然是大小写不敏感的，但是在写接口的时候是敏感的。
+

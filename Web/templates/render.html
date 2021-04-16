@@ -24,19 +24,34 @@
             border: 1px solid;
             margin: auto;
         }
+
+        .stateDiv {
+            height: 20px;
+        }
+
+        h1{
+            text-align: center;
+        }
     </style>
+    
 </head>
 
 <body>
-    排序方式：</br>
-    <input type="radio" name="basis">姓名
-    <input type="radio" name="basis">平时成绩
-    <input type="radio" name="basis">期中成绩
-    <input type="radio" name="basis">期末成绩
-    <input type="radio" name="basis">总成绩
-    </br>
-    <input type="radio" name='order'>升序
-    <input type="radio" name="order">降序
+    <h1>默认按总成绩降序</h1>
+    排序方式：
+</br>
+    <input type="radio" name="basis" id="姓名">姓名
+    <input type="radio" name="basis" id="平时成绩">平时成绩
+    <input type="radio" name="basis" id="期中成绩">期中成绩
+    <input type="radio" name="basis" id="期末成绩">期末成绩
+    <input type="radio" name="basis" id="总成绩">总成绩
+</br>
+    <input type="radio" name='order' id='1'>升序
+    <input type="radio" name="order" id='0'>降序
+</br>
+    <button id="btn1">确定</button>
+</br>        
+
     <table>
         <tr>
             <th>姓名</th>
@@ -48,6 +63,29 @@
         </tr>
         {{row|safe}}
     </table>
+    <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $("#btn1").click(function () {
+            var basis = $("[name='basis']").filter(":checked").attr("id");
+            var ascending = $("[name='order']").filter(":checked").attr("id");
+            $.post("/sortby", {
+                Basis: basis,
+                Ascending: ascending
+            },
+                function (data) {
+                    $("tr").remove("#rd");
+                    $("table").append(data);
+                    if (ascending == '1'){
+                        $('title').text('按'+basis+'升序');
+                        $('h1').text('按'+basis+'升序');}
+                    else{
+                        $('title').text('按'+basis+'降序');
+                        $('h1').text('按'+basis+'降序');}
+                }
+            );
+        });//绑定click事件到button元素,function()相当于Python的lambda函数
+    </script>
+
 </body>
 
 </html>
