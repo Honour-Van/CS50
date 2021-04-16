@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import pandas as pd
+from xpinyin import Pinyin
 
 
 def read_data() -> pd.DataFrame:
@@ -7,6 +8,9 @@ def read_data() -> pd.DataFrame:
         df = pd.DataFrame(pd.read_csv('poetScore.txt'))
     df.insert(4, '总成绩', [round(int(row['平时成绩'])*0.3+int(row['期中成绩'])*0.3+int(row['期末成绩'])*0.4)
                          for _, row in df.iterrows()])
+    df.rename(columns={'姓名': 'name'}, inplace=True)
+    p = Pinyin()
+    df.insert(5, '姓名', [p.get_pinyin(row['name'], tone_marks='numbers') for _, row in df.iterrows()])
     return df
 
 
@@ -22,7 +26,7 @@ def choose_color(grade):
 def draw_table(df: pd.DataFrame, sortby:str) -> str:
     rowdata = ''
     for _, row in df.iterrows():
-        rowunit = f"<tr id='rd'><td>{row['姓名']}</td><td>{row['平时成绩']}</td><td>{row['期中成绩']}</td><td>{row['期末成绩']}</td><td>{row['总成绩']}</td>"
+        rowunit = f"<tr id='rd'><td>{row['name']}</td><td>{row['平时成绩']}</td><td>{row['期中成绩']}</td><td>{row['期末成绩']}</td><td>{row['总成绩']}</td>"
         if sortby == "姓名":
             rowdata += rowunit
             rowdata += '</tr>'
