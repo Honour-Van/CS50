@@ -1,4 +1,7 @@
 # Web开发练习
+1900012739 范皓年 电子学系
+
+分别实现了两个版本，一个在python+flask端进行排序，另一个在JavaScript端实现大部分代码逻辑。
 
 目标效果如图所示。图片第一行显示成绩的排序方式，即按姓
 名、平时成绩、期中成绩、期末成绩、总成绩中的某一项升序或降
@@ -64,40 +67,128 @@ with open('poetScore.txt', 'r', encoding='utf-8') as f:
     df1 = pd.DataFrame(pd.read_csv('poetScore.txt'))
 ```
 
-dataFrame添加列：**https://blog.csdn.net/zx1245773445/article/details/99445332**</br>
+结合这两篇文章：
+
+dataFrame添加列：**https://blog.csdn.net/zx1245773445/article/details/99445332**
+
 行的遍历：**https://blog.csdn.net/ls13552912394/article/details/79349809**
 
+我们利用列表生成式将rawdata进行部分分析：
+```py
+df.insert(4, '总成绩', [round(int(row['平时成绩'])*0.3+int(row['期中成绩'])*0.3+int(row['期末成绩'])*0.4)
+                         for _, row in df.iterrows()])
+```
 
-#### Flask render_template
 
 #### 动态部分的构建
 dataframe排序：**https://blog.csdn.net/houyanhua1/article/details/87804111**
+```py
+df2 = read_data().sort_values(by=sb, ascending=asd) # dataframe排序是容易的
+```
 
 排序之后，利用Python生成HTML表格代码
-
+```
+def draw_table(df: pd.DataFrame, sortby:str) -> str:
+    rowdata = ''
+    for _, row in df.iterrows():
+        rowunit = f"<tr id='rd'><td>{row['name']}</td><td>{row['平时成绩']}</td><td>{row['期中成绩']}</td><td>{row['期末成绩']}</td><td>{row['总成绩']}</td>"
+        if sortby == "姓名":
+            rowdata += rowunit
+            rowdata += '</tr>'
+        else:
+            vis = row[sortby]
+            color = choose_color(vis)
+            rowunit += f"<td><div class='stateDiv' style='background:{color}; width:{vis}px;'></div></td></tr>"
+            rowdata += rowunit
+    return rowdata
+```
 #### 网页radio获取
 https://blog.csdn.net/newborn2012/article/details/17289345
 
-flask和html中js脚本的交互，注意，网址虽然是大小写不敏感的，但是在写接口的时候是敏感的。
+在jQuery中很容易利用选择器和过滤器获得被选项：
+```js
+var basis = $("[name='basis']").filter(":checked").attr("id");
+var ascending = $("[name='order']").filter(":checked").attr("id");
+```
 
+#### 一个小问题：大小写敏感
+flask和html中js脚本的交互，注意，网址虽然是大小写不敏感的，但是在写接口的时候是敏感的。
+```js
+$.post("/sortby", {
+    Basis: basis,
+    Ascending: ascending
+    },
+    function (data) {
+        $("tr").remove("#rd");
+        $("table").append(data);
+        if (ascending == '1'){
+            $('title').text('按'+basis+'升序');
+            $('h1').text('按'+basis+'升序');}
+        else{
+            $('title').text('按'+basis+'降序');
+            $('h1').text('按'+basis+'降序');}
+    }
+);
+```
+如果其中的域名写作sortBy将无法识别。
 
 #### 拼音排名
 使用xpinyin模块
-
-dataframe列改名
+```py
+p = Pinyin()
+df.insert(5, '姓名', [p.get_pinyin(row['name'], tone_marks='numbers') for _, row in df.iterrows()])
+```
+但是如果将拼音列标记为‘姓名’，那么在显示的时候，就会列出所有的拼音，所以这里要对dataframe原来的‘姓名’列改名：
+```py
+p = Pinyin()
+df.insert(5, '姓名', [p.get_pinyin(row['name'], tone_marks='numbers') for _, row in df.iterrows()])
+```
 
 ### 补充内容
-尝试将df传到前端进行处理
-
+尝试将df传到前端进行处理。
 #### 将json对象传递到前端
-**https://www.cnblogs.com/lazyboy1/p/5015111.html**
+采用了**https://www.cnblogs.com/lazyboy1/p/5015111.html**中的方法5，但是模板中的替代数据是字符串即可。
 
-采用了其中的方法5，但是模板中的替代数据是字符串即可。
+flask代码如下，这是非常简单的：
+```py
+@app.route('/')
+def root():
+    return render_template('render2.html', data=read_data().to_json(orient='records', force_ascii=False))
+```
+接下来的重要问题出现在我们不太熟悉的JavaScript上
+
 
 然后是排序，**https://www.jianshu.com/p/92c3bf42a7b1**
 
 排序在点击按钮的时候扫描得出模式，然后进行排序。
+```js
+var basis = $("[name='basis']").filter(":checked").attr("id");
+var ascending = $("[name='order']").filter(":checked").attr("id");
+data = mysort(stu_data, basis, ascending);
+$("tr").remove("#rd");
+console.log($("table"));
+$.each(data, function (index, value) {
+    rowdata = `<tr id='rd'><td>${value.name}</td><td>${value.平时成绩}</td><td>${value.期中成绩}</td><td>${value.期末成绩}</td><td>${value.总成绩}</td>`
+    if (basis !== "姓名") {
+        var vis = value[basis];
+        var color = choose_color(vis);
+        rowdata += `<td><div class='stateDiv' style='background:${color}; width:${vis}px;'></div></td></tr>`;
+    }
+    rowdata += '</tr>';
+    $("table tbody").append(rowdata);
 
+    if (ascending == '1') {
+        $('title').text('按' + basis + '升序');
+        $('h1').text('按' + basis + '升序');
+    }
+    else {
+        $('title').text('按' + basis + '降序');
+        $('h1').text('按' + basis + '降序');
+    }
+});
+```
+
+但是第一次我们得到了如下的表格：
 ![image-20210416223018697](D:\cs50\Web\README.assets\image-20210416223018697.png)
 
 预估是table的html代码发生了问题。观察如下：

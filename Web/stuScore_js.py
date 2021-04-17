@@ -1,5 +1,12 @@
+
+'''
+@file: studScore.py
+@author: 范皓年 1900012739 电子学系
+@description: js端获得radio选项
+              js获取python端以json格式传递的dataframe
+              js端进行排序、颜色选择和html表格生成
+'''
 from flask import Flask, jsonify, render_template
-import studScore as sc
 import pandas as pd
 from xpinyin import Pinyin
 
