@@ -1,6 +1,8 @@
 # Web开发练习
 1900012739 范皓年 电子学系
 
+https://github.com/Honour-Van/CS50/tree/master/Web
+
 分别实现了两个版本，一个在python+flask端进行排序，另一个在JavaScript端实现大部分代码逻辑。
 
 目标效果如图所示。图片第一行显示成绩的排序方式，即按姓
@@ -74,7 +76,7 @@ dataFrame添加列：**https://blog.csdn.net/zx1245773445/article/details/994453
 行的遍历：**https://blog.csdn.net/ls13552912394/article/details/79349809**
 
 我们利用列表生成式将rawdata进行部分分析：
-```py
+```python
 df.insert(4, '总成绩', [round(int(row['平时成绩'])*0.3+int(row['期中成绩'])*0.3+int(row['期末成绩'])*0.4)
                          for _, row in df.iterrows()])
 ```
@@ -82,12 +84,12 @@ df.insert(4, '总成绩', [round(int(row['平时成绩'])*0.3+int(row['期中成
 
 #### 动态部分的构建
 dataframe排序：**https://blog.csdn.net/houyanhua1/article/details/87804111**
-```py
+```python
 df2 = read_data().sort_values(by=sb, ascending=asd) # dataframe排序是容易的
 ```
 
 排序之后，利用Python生成HTML表格代码
-```
+```python
 def draw_table(df: pd.DataFrame, sortby:str) -> str:
     rowdata = ''
     for _, row in df.iterrows():
@@ -134,12 +136,12 @@ $.post("/sortby", {
 
 #### 拼音排名
 使用xpinyin模块
-```py
+```python
 p = Pinyin()
 df.insert(5, '姓名', [p.get_pinyin(row['name'], tone_marks='numbers') for _, row in df.iterrows()])
 ```
 但是如果将拼音列标记为‘姓名’，那么在显示的时候，就会列出所有的拼音，所以这里要对dataframe原来的‘姓名’列改名：
-```py
+```python
 p = Pinyin()
 df.insert(5, '姓名', [p.get_pinyin(row['name'], tone_marks='numbers') for _, row in df.iterrows()])
 ```
@@ -150,7 +152,7 @@ df.insert(5, '姓名', [p.get_pinyin(row['name'], tone_marks='numbers') for _, r
 采用了**https://www.cnblogs.com/lazyboy1/p/5015111.html**中的方法5，但是模板中的替代数据是字符串即可。
 
 flask代码如下，这是非常简单的：
-```py
+```python
 @app.route('/')
 def root():
     return render_template('render2.html', data=read_data().to_json(orient='records', force_ascii=False))
