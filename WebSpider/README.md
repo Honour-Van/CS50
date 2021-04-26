@@ -156,7 +156,11 @@ while True:
 
 
 同时由于数据量极大，我们简单对比了几个平台之下的速度（1分钟）：
+```
 powershell：2959
 vscode：2187
 wsl linux:2648
 cmd: 3126
+```
+
+![image-20210426085157572](assets/image-20210426085157572.png)

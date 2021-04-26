@@ -68,7 +68,7 @@ def spider_next(url, lev):
         tcs = datetime.now()
         if lev == 2 or lev == 3:
             print("["+format_time(tcs)+"] " + '*' *
-                  (lev-1) + item_name + "开始爬取...", file=logFile)
+                  (lev-1) + item_name + "开始爬取...")
 
         if item_href is not None:
             spider_next(get_prefix(url) + item_href, lev + 1)
@@ -76,8 +76,9 @@ def spider_next(url, lev):
         tce = datetime.now()
         if lev == 2 or lev == 3:
             print("["+format_time(tce)+"] " + '*' * (lev-1) +
-                  item_name + "爬取完成，用时" + format_time((tce-tcs), False), file=logFile)
-
+                  item_name + "爬取完成，用时" + format_time((tce-tcs), False))
+        if lev == 2:
+            print("--------------------------------------------------------")
     tab = tab[:-1]
     if has_cur_lev is not True and lev != 5:
         spider_next(url, lev + 1)
@@ -89,7 +90,6 @@ if __name__ == '__main__':
     province_url = "http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2020/index.html"
     province_list = get_html(province_url).select('tr.provincetr a')
     wFile = open("StatData.txt", "w", encoding="utf-8")
-    logFile = open("log.txt", 'w', encoding='utf-8')
     start_time = datetime.now()
     str(start_time)[:19]
     try:
@@ -101,15 +101,15 @@ if __name__ == '__main__':
             print(content, file=wFile)
 
             tps = datetime.now()
-            print("["+format_time(tps)+"] "+province_name+"开始爬取...", file=logFile)
+            print("["+format_time(tps)+"] "+province_name+"开始爬取...")
 
             spider_next(get_prefix(province_url) + href, 2)
 
             tpe = datetime.now()
             print("["+format_time(tps)+"] "+province_name +
-                  "爬取完成，用时" + format_time((tpe-tps), False), file=logFile)
-
-        print("总用时：" + format_time((datetime.now()-start_time), False), file=logFile)
+                  "爬取完成，用时" + format_time((tpe-tps), False))
+            print("========================================================")
+            
+        print("总用时：" + format_time((datetime.now()-start_time), False))
     finally:
         wFile.close()
-        logFile.close()
