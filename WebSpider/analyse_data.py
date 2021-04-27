@@ -56,18 +56,21 @@ if __name__ == "__main__":
                     prov_cnt = False
             elif is_base(line):
                 task1[line[-4:-1]] = task1.get(line[-4:-1], 0) + 1
-                if sub_base_flag:
-                    sub_base_flag = False
-                    if last_name[0] in task3:
-                        task3[last_name[0]] = task3[last_name[0]] + 1
+                
                 if prov_cnt:
                     base_name = place_name(line)
                     if base_name[-3:] == "村委会":
                         for item in base_name[:-3]:
                             task2[prov_name][item] = task2[prov_name].get(
                                 item, 0) + 1
-                    if base_name[0] in task3:
-                        task3[base_name[0]] = task3[base_name[0]] + 1
+
+                if sub_base_flag:
+                    sub_base_flag = False
+                    if last_name[0] in task3:
+                        task3[last_name[0]] = task3[last_name[0]] + 1
+                name3 = place_name(line)
+                if name3[0] in task3:
+                    task3[name3[0]] = task3[name3[0]] + 1
             else:
                 sub_base_flag = True
             last_name = place_name(line)
