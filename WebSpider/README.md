@@ -164,3 +164,67 @@ cmd: 3126
 ```
 
 ![image-20210426085157572](assets/image-20210426085157572.png)
+
+### 统计分析
+
+共679237行
+
+通过一次性遍历，把每个省的数据统计出来：
+
+#### task 1
+
+```pseudocode
+（利用缩进判断）
+如果是一个省/直辖市:
+	计数
+否则：
+	遍历基层并计数
+
+统一显示：
+	利用dataframe存储之后输出是比较方便的
+```
+
+注意，基层不一定是五层。我们应当通过最后三位数进行判断是否为基层。
+
+了解：
+
+- dataframe的创建：https://blog.csdn.net/qq_42067550/article/details/106148799
+- dataframe基于dict添加：https://blog.csdn.net/ningyanggege/article/details/93331542
+- dataframe输出：https://blog.csdn.net/qq_27133869/article/details/103709805
+
+![image-20210427164212203](assets/image-20210427164212203.png)
+
+![image-20210427165328449](assets/image-20210427165328449.png)
+
+#### task 2
+
+```pseudocode
+如果是河南或者内蒙古：
+	判断基层：
+		如果是村委会：
+			统计字频
+去掉“村”“委”“会”
+显示
+```
+
+利用dict进行统计
+
+#### task 3
+
+统计一个词典的词频：https://ask.csdn.net/questions/761132
+
+```
+读入词语
+遍历词语中的单字:
+	如果在要找的百家姓中:
+		计数
+	否则
+```
+
+#### 需要定义的组件函数
+
+判断是否是一个省级单位
+
+判断是否是基层
+
+提取名称的函数
