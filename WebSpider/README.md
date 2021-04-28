@@ -55,25 +55,35 @@
 
 ## 补充说明
 
-可以使用多线程加速运行时间
-
-考虑
+可以使用多线程加速运行时间，但是考虑到反爬带来的不一致性我们最终没有采用。
 
 ## 代码实现
-### 爬虫单元
+### 文件结构
 
-`parco.py`中给出一个函数，每一个链接的调用返回一个`名称:链接`的字典
+实现了一个面向对象的程序，组件`parco`和主程序`get_data`，
 
-由于要输出，所以我们考虑把层数加进去。这样就可以有机地调整输出
+`parco.py`中给出一个函数，每一个链接的调用返回一个`名称:链接`的字典。然后在`get_data`中实现递归调用。
 
-小问题：
-1. 诸如：
+由于要输出，所以我们考虑把层数加进去。这样就可以有机地调整输出。
+
+由于诸多原因这个目标并未实现。后来我们不再使用面向对象的结构，而直接换用面向过程的代码，如`stat_spider.py`。
+
+
+
+我们接下来的叙述也基于`stat_spider.py`
+
+
+
+#### 文本内容和链接获取
+
 ```
 <a href="11.html">北京市<br/></a>
 ```
 的网页，不能直接从string属性当中获得标签对应的文本。
 
 解决方法：删除不配对标签 https://blog.csdn.net/u012587107/article/details/80543977
+
+或者使用get_text函数
 
 
 
@@ -83,31 +93,13 @@
 {'北京市': '11.html', '天津市': '12.html', '河北省': '13.html', '山西省': '14.html', '内蒙古自治区': '15.html', '辽宁省': '21.html', '吉林省': '22.html', '黑龙江省': '23.html', '上海市': '31.html', '江苏省': '32.html', '浙江省': '33.html', '安徽省': '34.html', '福建省': '35.html', '江西省': '36.html', '山东省': '37.html', '河南省': '41.html', '湖北省': '42.html', '湖南省': '43.html', '广东省': '44.html', '广西壮族自治区': '45.html', '海南省': '46.html', '重庆市': '50.html', '四川省': '51.html', '贵州省': '52.html', '云南省': '53.html', '西藏自治区': '54.html', '陕西省': '61.html', '甘肃省': '62.html', '青海省': '63.html', '宁夏回族自治区': '64.html', '新疆维吾尔自治区': '65.html'}
 ```
 
+随机开始进行递归调用。
 
-
-### 分层调用
-baselink开始，调用三层或四层，就可以得到想要的数据结果。
-
-每一层调用：
-
-1. 先输出当前层对应的名称：将当前dict的value补全0输出
-2. 开始遍历
-   1. 如果是最里层：直接输出内容
-   2. 如果是外层：递归遍历
-
-第二层要去重：
-
-```python
-for key, val in res.items():
-	if key.isdigit():
-		name = key
-	else:
-		name += key
-```
+由于省级没有对应编码，所以可以考虑单独处理。
 
 
 
-深层反爬？出现问题
+#### 反爬？这里是HTML解析的问题
 
 ```
                 130671000000保定高新技术产业开发区
@@ -131,31 +123,64 @@ for key, val in res.items():
 330000000000浙江省
 ```
 
-并非。是因为后面的省市都换用了table结构。随后我们对嗅探函数parco.collect进行扩充
+并不全是。似乎一个重要原因是后面的省市都换用了table结构。每一层当中的tr标签都具有相对鲜明的特征，这些使用CSS select非常容易选出。
 
+html的结构对我们编写爬虫来说非常关键。
 
+#### 对于特定问题过程化的好处
 
-没有认识到find_all返回的resultset是一个列表结构，吃了不少亏
+过程化可以减少对象的传递，比如在网页当中，两个链接并排时，我们可以两个两个处理它们，而不用考虑怎样构建更好的数据结构的问题。而直接将对应的tr中的td取出来就好。
 
+另外我们没有认识到find_all返回的resultset是一个列表结构，最初只进行迭代遍历，吃了不少亏。
 
-#### 异常处理
 ```python
-while True:
-	try:
-		# 超时时间为1秒
-		print('1')
-		response = requests.get(url, timeout=1)
-		print('2')
-		response.encoding = "GBK" # 必须要用这个？
-		print('3')
-		if response.status_code == 200:
-		print('4')
-		return BeautifulSoup(response.text, "html.parser")
+item_href = item_td_code.get("href")
+item_code = item_td_code.get_text()
+item_name = item_td_name.get_text()
+```
+
+比如后来我们采用了如上的语句即可，由于每一条有效数据都对应着一个tr，编码和名称分别对应两个td，故而我们可以非常容易地筛选出来。
+
+
+#### 异常处理：解决反爬
+```python
+def get_html(url):
+    """
+    # get_html
+    @Description:
+    get html code by url 
+    based on exception handling and anti-spider design 
+    to realize totally data mining
+    ---------
+    @Param:
+    a url str
+    -------
+    @Returns:
+    a Beautifulsoup object
+    GBK encoding and html.parser as resolver.
+    -------
+    """
+    while True:
+        try:
+            response = requests.get(url, timeout=1) # set appropriate timeout to reduce the possibilities of anti-spider
+            response.encoding = "GBK"
+            if response.status_code == 200: # if access successfully
+                return BeautifulSoup(response.text, "html.parser")
+            else:
+                continue
+        except Exception:
+            # if we add a print here, we could see that it actually fail somtimes
+            continue
+
 ```
 我们在输出中发现了诸如连续的1。后来确定，达到timeout之后确实会触发异常。
 
+如果这时候我们在异常处理分支添加一个输出，那么我们将会发现超时是不时发生的，这时候我们重新开始爬取即可。进入while循环
 
-同时由于数据量极大，我们简单对比了几个平台之下的速度（1分钟）：
+#### 计时分析
+
+
+由于数据量极大，我们添加了log简单对比了几个平台之下的速度（1分钟）：
 ```
 powershell：2959
 vscode：2187
@@ -176,7 +201,7 @@ cmd: 3126
 ```pseudocode
 （利用缩进判断）
 如果是一个省/直辖市:
-	计数
+	计数开始
 否则：
 	遍历基层并计数
 
@@ -190,6 +215,7 @@ cmd: 3126
 
 - dataframe的创建：https://blog.csdn.net/qq_42067550/article/details/106148799
 - dataframe基于dict添加：https://blog.csdn.net/ningyanggege/article/details/93331542
+- dataframe.append(pd.Series)：https://blog.csdn.net/sinat_29957455/article/details/84961936（使用这个方法才能重新命名index）
 - dataframe输出：https://blog.csdn.net/qq_27133869/article/details/103709805
 
 ![image-20210427164212203](assets/image-20210427164212203.png)
@@ -221,10 +247,14 @@ cmd: 3126
 	否则
 ```
 
+词典的key可以作为是否查询的判据，用于判断一个词典是否为空，以及一个变量是否作为key出现在这个dict中。
+
+由于需要判断倒数第二深层，其中部分地方只有四层，所以这个判断的行为也并不是统一的。这里我们考虑，基层的父层是倒数第二层。所以先将上一层的名称保存下来，如果进入了基层区域，那么上一条记录就必然是倒数第二层。
+
 #### 需要定义的组件函数
 
-判断是否是一个省级单位
+判断是否是一个省级单位`is_prov`
 
-判断是否是基层
+判断是否是基层`is_base`
 
-提取名称的函数
+提取名称的函数`place_name`
