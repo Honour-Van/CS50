@@ -1,5 +1,7 @@
 # Python爬虫练习
 
+详情可见我的github仓库：https://github.com/Honour-Van/CS50/tree/master/WebSpider
+
 进入国家统计局[2020年统计用区划代码和城乡划分](http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2020/index.html)。以此为起点，自动爬取各省市自治区相应统计单位一直到最基层为止，以此为基础，对中国基层行政单位的名称进行统计分析。这样的分析此前已经存在，比如网易数读的文章《[我们分析了67万个村名，找到了中国地名的秘密](https://xw.qq.com/cmsid/20181204A18Y2Q00?f=dc)》。
 
 ## 数据获取
