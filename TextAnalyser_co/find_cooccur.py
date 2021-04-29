@@ -5,11 +5,13 @@
 @author: Honour-Van: fhn037@126.com
 @date:2021/04/29 13:58:49
 @description: 练习题：统计《红楼梦》中的人物共现情况
-@version:1.0
+@version: 1.0: 改换文本内容进行测试
+          1.1: 根据上一个版本中得到的结果，进行分析并添加同义词和忽略词。
 '''
 
 import jieba
 import jieba.posseg as pseg
+import json
 
 ##--- 第0步：准备工作，重要变量的声明
 
@@ -42,7 +44,16 @@ name_cnt_dict = {}  # 统计人物出现次数
 
 # ！！设置忽略词的列表和同义词的字典
 ignore_list = []
+ignore_config = "assets/ignore_list.txt"
+with open(ignore_config, 'r', encoding='utf-8') as f:
+    ignore_list = f.readline().strip()
+
 syno_dict = {}
+syno_config = 'assets/syno_dict.json'
+with open(syno_config, 'r', encoding='utf-8') as f:
+    syno_dict = json.load(f)
+# print(ignore_list)
+# print(syno_dict)
 
 print('正在分段统计……')
 print('已处理词数：')
@@ -155,4 +166,4 @@ for name1,link_dict in relation_dict.items():
             link_cnt = link_cnt + 1
 link_file.close()
 print('连接数量：' + str(link_cnt))
-print('已写入文件：' + link_file_name)      
+print('已写入文件：' + link_file_name)
