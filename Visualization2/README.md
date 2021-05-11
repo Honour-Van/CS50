@@ -1,10 +1,14 @@
 # 基于网页的可视化
 
+> 程序设计思维作业 0429
+
+1900012739 范皓年 电子学系
+
 ## description
 
-based on echarts
+>based on echarts
 
-TIP 20210429 作业，对地铁数据进行分析之后的可视化分析。
+对地铁数据进行分析之后的可视化分析。
 
 数据见 data，数据是北京地铁刷卡数据。第一行是数据标题，其含义如下：
 
@@ -42,13 +46,13 @@ TIP 20210429 作业，对地铁数据进行分析之后的可视化分析。
 
 利用两个数据文件，通过包含 JS 数据文件方式，显示出形如 Excel 的统计图。与 task3 页面要求一致，仅数据源不同而已。
 
-## implementation
+## design
 
 总述：时间为主要因素，从而构建一个时间的提取函数。从而完成 task 1，由于只有 5M+条记录，所以我们可以直接将每一个记录直接映射到时间轴上，从而完成 task 2。得到两组比较简单的线性图样，随后进行 flask 的 web 投送，和
 
-### 时间提取函数
+### 时间提取
 
-清除不正则数据：
+不正则数据：
 
 - 下车早于上车
 - 消除不在当日的数据
@@ -60,23 +64,35 @@ TIP 20210429 作业，对地铁数据进行分析之后的可视化分析。
 
 ### 时间轴统计
 
-如果记录的进入离开时间在特定范围内，记增减。
+如果记录的进入离开时间在特定范围内，记增减。注意每次要加前一次的
 
+### 重要知识点回顾
 
+表示进度：https://blog.csdn.net/lwgkzl/article/details/80988126
 
+dataframe 更名：https://blog.csdn.net/weixin_43745169/article/details/89306686
 
+dataframe 定位：https://blog.csdn.net/W_weiying/article/details/81411257
 
-表示进度
+datetime 的使用方法：
 
-https://blog.csdn.net/lwgkzl/article/details/80988126
-
-dataframe更名：https://blog.csdn.net/weixin_43745169/article/details/89306686
-
-dataframe定位：https://blog.csdn.net/W_weiying/article/details/81411257
-
-## 重要知识点回顾
-datetime的使用方法：
 - `strptime()`函数
 - `timedelta`类型
 
-不会把python列表直接变成js中的变量
+不会把 python 列表直接变成 js 中的变量，从而使用了复制粘贴
+
+## 文件结构说明
+
+`data`中包含地铁记录信息，其中完整版数据因为大于100M，无法上传到Github端，直接删除掉。
+
+`out`文件夹中为第5,6题中的数据，其中数据输出到csv文件中，而图表绘制在xlsx中。
+
+`static`文件夹为flask相关组件，包括几个工具组件、静态页面以及数据文件mydata
+
+`range_stat.py`对应第五题
+
+`online_stat.py`对应第六题。
+
+`webvis.py`对应第七题，在flask端获取dataframe并通过jsonify方法传递到网页端。
+
+`visjs.py`对应第八题，直接从js文件中获取变量。
