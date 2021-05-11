@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ECharts</title>
+    <script src="./static/echarts.min.js"></script>
+    <script src="./out/myData.js"></script>
+  </head>
+  <body>
+    <div id="stat1" style="width: 600px; height: 400px"></div>
+    <div id="stat2" style="width: 600px; height: 400px"></div>
+    <!--统计图显示于此-->
+    <script type="text/javascript">
+      var EChart1 = echarts.init(document.getElementById("stat1"));
+      var EChart2 = echarts.init(document.getElementById("stat2"));
+      var option = {
+        title: { text: "" },
+        tooltip: {},
+        legend: { data: ["折线图", "柱形图"] },
+        toolbox: {
+          feature: {
+            magicType: { type: ["line", "bar"] },
+            saveAsImage: {},
+          },
+        },
+        xAxis: { data: [] },
+        yAxis: {},
+        series: [
+          { name: "折线图", type: "line", data: [] },
+          { name: "柱形图", type: "bar", data: [] },
+        ],
+      }; /*设置统计图形参数*/
+      option.title.text = "地铁乘车用时统计";
+      option.xAxis.data = userData1[0];
+      option.series[0].data = userData1[1];
+      option.series[1].data = userData1[1];
+      EChart1.setOption(option);
+
+      option.title.text = "地铁站内人员统计";
+      option.xAxis.data = userData2[0];
+      option.series[0].data = userData2[1];
+      option.series[1].data = userData2[1];
+      EChart2.setOption(option);
+    </script>
+  </body>
+</html>
