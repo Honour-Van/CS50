@@ -1,0 +1,15 @@
+{
+  "2019-12": { "positive cnt": 3734, "neutral cnt": 171, "negative cnt": 565 },
+  "2020-1": { "positive cnt": 8114, "neutral cnt": 498, "negative cnt": 2122 },
+  "2020-2": { "positive cnt": 8888, "neutral cnt": 237, "negative cnt": 1216 },
+  "2020-3": { "positive cnt": 8694, "neutral cnt": 424, "negative cnt": 2307 },
+  "2020-4": { "positive cnt": 8009, "neutral cnt": 368, "negative cnt": 1698 },
+  "2020-5": { "positive cnt": 6754, "neutral cnt": 311, "negative cnt": 1502 },
+  "2020-6": { "positive cnt": 6360, "neutral cnt": 356, "negative cnt": 1442 },
+  "2020-7": { "positive cnt": 7240, "neutral cnt": 336, "negative cnt": 1322 },
+  "2020-8": { "positive cnt": 6632, "neutral cnt": 360, "negative cnt": 1492 },
+  "2020-9": { "positive cnt": 6290, "neutral cnt": 348, "negative cnt": 1748 },
+  "2020-10": { "positive cnt": 6494, "neutral cnt": 313, "negative cnt": 1587 },
+  "2020-11": { "positive cnt": 7292, "neutral cnt": 390, "negative cnt": 1665 },
+  "2020-12": { "positive cnt": 7922, "neutral cnt": 436, "negative cnt": 1677 }
+}
