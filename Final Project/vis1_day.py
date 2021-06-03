@@ -7,9 +7,10 @@ with open('./data/date.json', 'r', encoding='utf-8') as f:
     date_list = json.load(f)
 
 tl = Timeline(
-    init_opts=opts.InitOpts(width='2000px',
+    init_opts=opts.InitOpts(width='1700px',
                             height='600px',
-                            page_title="武汉微博舆情-分日")
+                            page_title="武汉微博舆情-分日",
+                            theme=ThemeType.MACARONS)
 )
 l = len(date_list)
 for i in range(l-1):
@@ -80,14 +81,16 @@ for i in range(l-1):
             .add_xaxis(xdistri)
             .add_yaxis('频数', ydistri)
             .set_global_opts(
-                title_opts=opts.TitleOpts(title="舆情积极度分布"),
+                title_opts=opts.TitleOpts(title="舆情积极度分布",subtitle=f"{y}年{m}月{d}日"),
                 yaxis_opts=opts.AxisOpts(name="舆情积极度频数"),
                 xaxis_opts=opts.AxisOpts(name="舆情积极度"),
             )
+            .set_series_opts(itemstyle_opts = opts.ItemStyleOpts(color="orange"))
         )
-    grid = Grid()
-    grid.add(bar, grid_opts=opts.GridOpts(pos_right="20%"))
-    grid.add(pie, grid_opts=opts.GridOpts(pos_left="20%"))
-    grid.render()
+    grid = (
+        Grid()
+        .add(bar, grid_opts=opts.GridOpts(pos_right="20%"))
+        .add(pie, grid_opts=opts.GridOpts(pos_left="20%"))
+    )
     tl.add(grid, f"{y}-{m}-{d}")
 tl.render('./out/wuhan_byday.html')

@@ -59,7 +59,7 @@ for i in range(l-1):
     m = str(int(hour_list[i]['month'])+1)
     d = str(hour_list[i]['day']+1)
     h = hour_list[i]['hour']
-    with open(f'./out/wuhan_raw/{y}-{m}-{d}-{h}.txt', 'r', encoding='utf-8') as f:
+    with open(f'./out/wuhan_hour/{y}-{m}-{d}-{h}.txt', 'r', encoding='utf-8') as f:
         senta.add(f.readlines())
     senta.predict()
     hour_neg = 0
@@ -77,6 +77,6 @@ for i in range(l-1):
         else:
             hour_neu += 1
     with open(f'./out/wuhan_stat_hour/{y}-{m}-{d}-{h}.json', 'w', encoding='utf-8') as f:
-        json.dump({"hour positive count": day_pos, "hour neutral count": day_neu,
-                  "hour negative count": day_neg, "hour distri": pos_dis}, f)
+        json.dump({"hour positive count": hour_pos, "hour neutral count": hour_neu,
+                  "hour negative count": hour_neg, "hour distri": pos_dis}, f)
     pb.progress(i)
