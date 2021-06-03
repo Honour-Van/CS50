@@ -1,1 +1,1 @@
-{"hour positive rate": 0.98, "hour neutral rate": 0.0, "hour negative rate": 0.02, "hour distri": {"0.61": 53, "0.02": 1, "0.08": 1, "0.99": 20, "0.98": 8, "1.0": 3, "0.97": 2, "0.93": 1, "0.95": 2, "0.83": 1}}
+{"hour positive count": 280, "hour neutral count": 53, "hour negative count": 64, "hour distri": {"0.61": 53, "0.02": 1, "0.08": 1, "0.99": 20, "0.98": 8, "1.0": 3, "0.97": 2, "0.93": 1, "0.95": 2, "0.83": 1}}
