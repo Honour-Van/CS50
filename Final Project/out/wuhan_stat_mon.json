@@ -1,15 +1,1 @@
-{
-  "2019-12": { "positive cnt": 3734, "neutral cnt": 171, "negative cnt": 565 },
-  "2020-1": { "positive cnt": 8114, "neutral cnt": 498, "negative cnt": 2122 },
-  "2020-2": { "positive cnt": 8888, "neutral cnt": 237, "negative cnt": 1216 },
-  "2020-3": { "positive cnt": 8694, "neutral cnt": 424, "negative cnt": 2307 },
-  "2020-4": { "positive cnt": 8009, "neutral cnt": 368, "negative cnt": 1698 },
-  "2020-5": { "positive cnt": 6754, "neutral cnt": 311, "negative cnt": 1502 },
-  "2020-6": { "positive cnt": 6360, "neutral cnt": 356, "negative cnt": 1442 },
-  "2020-7": { "positive cnt": 7240, "neutral cnt": 336, "negative cnt": 1322 },
-  "2020-8": { "positive cnt": 6632, "neutral cnt": 360, "negative cnt": 1492 },
-  "2020-9": { "positive cnt": 6290, "neutral cnt": 348, "negative cnt": 1748 },
-  "2020-10": { "positive cnt": 6494, "neutral cnt": 313, "negative cnt": 1587 },
-  "2020-11": { "positive cnt": 7292, "neutral cnt": 390, "negative cnt": 1665 },
-  "2020-12": { "positive cnt": 7922, "neutral cnt": 436, "negative cnt": 1677 }
-}
+{"2019-12": {"positive cnt": 3298, "neutral cnt": 601, "negative cnt": 571}, "2020-1": {"positive cnt": 7019, "neutral cnt": 1568, "negative cnt": 2147}, "2020-2": {"positive cnt": 8377, "neutral cnt": 740, "negative cnt": 1224}, "2020-3": {"positive cnt": 7669, "neutral cnt": 1416, "negative cnt": 2340}, "2020-4": {"positive cnt": 7100, "neutral cnt": 1268, "negative cnt": 1707}, "2020-5": {"positive cnt": 6011, "neutral cnt": 1048, "negative cnt": 1508}, "2020-6": {"positive cnt": 5495, "neutral cnt": 1207, "negative cnt": 1456}, "2020-7": {"positive cnt": 6464, "neutral cnt": 1096, "negative cnt": 1338}, "2020-8": {"positive cnt": 5773, "neutral cnt": 1197, "negative cnt": 1514}, "2020-9": {"positive cnt": 5457, "neutral cnt": 1165, "negative cnt": 1764}, "2020-10": {"positive cnt": 5694, "neutral cnt": 1100, "negative cnt": 1600}, "2020-11": {"positive cnt": 6340, "neutral cnt": 1327, "negative cnt": 1680}, "2020-12": {"positive cnt": 6835, "neutral cnt": 1507, "negative cnt": 1693}}

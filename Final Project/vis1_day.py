@@ -9,7 +9,7 @@ with open('./data/date.json', 'r', encoding='utf-8') as f:
 tl = Timeline(
     init_opts=opts.InitOpts(width='2000px',
                             height='600px',
-                            page_title="武汉-微博舆情分日")
+                            page_title="武汉微博舆情-分日")
 )
 l = len(date_list)
 for i in range(l-1):

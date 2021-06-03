@@ -95,3 +95,4 @@ if __name__ == "__main__":
     senta = Senta()
     senta.add(["这个宾馆比较陈旧了，特价的房间也很一般。总体来说一般", "稍微重了点，可能是硬盘大的原故，还要再轻半斤就好了。"])
     senta.predict()
+    senta.print()
