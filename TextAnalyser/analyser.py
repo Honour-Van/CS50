@@ -105,7 +105,7 @@ class TextAnalyser(object):
         @ ignore：是否弃用忽略列表
         @ syno：是否弃用同义词替换
         @ show：是否呈现结果
-        @ nameren：是否弃用人名模式
+        @ nameren：是否启用人名模式
         """
         if ignore:
             self.set_ignore_list()
