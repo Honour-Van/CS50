@@ -50,7 +50,7 @@ class TextAnalyser(object):
         with open('syno_dict.json', 'r', encoding='utf-8') as f:
             self.syno_dict = json.load(f)
 
-    def analyse(self, content, minlen=2, maxlen=10, nr=False):
+    def analyse(self, content, minlen=2, maxlen=10, nr=False, show=True):
         """
         ## analyse
         用于将输入的字符串进行有效的分词与过滤
@@ -59,16 +59,16 @@ class TextAnalyser(object):
         @ nr：是否启动人名模式
         """
         # 分词
-        print("word cutting...")
+        if show: print("word cutting...")
         word_list = jieba.lcut(content)
         if len(word_list):
-            print("word cutting finished")
+            if show: print("word cutting finished")
 
         if nr:
-            print("word tagging...")
+            if show: print("word tagging...")
             psg_dict = dict(pseg.lcut(content))
             if len(psg_dict):
-                print("word tagging finished")
+                if show: print("word tagging finished")
             minlen = 2
             maxlen = 3
 
@@ -122,9 +122,9 @@ class TextAnalyser(object):
             txt_file = open(self.txt_filename, 'r', encoding='utf-8')
             content = txt_file.read()
             txt_file.close()
-            self.analyse(content, minlen=minlen, maxlen=maxlen, nr=nameren)
+            self.analyse(content, minlen=minlen, maxlen=maxlen, nr=nameren, show=show)
         if show:
-            self.get_result()
+            self.get_result(show=show)
             self.get_wordcloud()
 
     def get_wordcloud(self):
@@ -149,7 +149,7 @@ class TextAnalyser(object):
         plt.margins(0, 0)
         plt.savefig('./wordcloud.png', bbox_inches='tight')
 
-    def get_result(self, result_filename='./output.csv'):
+    def get_result(self, result_filename='./output.csv',num=10,show=True):
         """
         # get_result
         打印结果，并输出到csv文件当中
@@ -159,25 +159,29 @@ class TextAnalyser(object):
         items_list.sort(key=lambda x: x[1], reverse=True)
 
         total_num = len(items_list)
-        print('经统计，共有' + str(total_num) + '个不同的词')
-        # 根据用户需求，打印排名前列的词，同时把统计结果存入文件
-        num = input('您想查看前多少个词语？[10]: ')
-        if not num.isdigit() or num == '':  # 如果输入的不全是数字，或者直接按了回车
-            num = 10  # 设成查看前10名
-        else:
-            num = int(num)  # 如果输入了正常的数字，则按用户需求设置
-
+        if num == 10: # 如果没有设定，则进入手动模式
+            print('经统计，共有' + str(total_num) + '个不同的词')
+            # 根据用户需求，打印排名前列的词，同时把统计结果存入文件
+            num = input('您想查看前多少个词语？[10]: ')
+            if not num.isdigit() or num == '':  # 如果输入的不全是数字，或者直接按了回车
+                num = 10  # 设成查看前10名
+            else:
+                num = int(num)  # 如果输入了正常的数字，则按用户需求设置
+        if num > total_num:
+            num = total_num
         with open(result_filename, 'w') as f:  # 新建结果文件
-            f.write('词语, 词频\n')  # 写入标题行
-            print('位次\t词语\t\t词频')
+            f.write('word, freq\n')  # 写入标题行
+            if show: print('位次\t词语\t\t词频')
             for i in range(num):
                 word, cnt = items_list[i]
                 message = str(i+1) + '\t' + word + '\t\t' + str(cnt)
-                print(message)
+                if show: print(message)
                 f.write(word + ',' + str(cnt) + '\n')
 
         print('已写入文件：' + result_filename)
 
+    def look_up(self, lookup_table=[]):
+        return [self.word_dict.get(x, 0) for x in lookup_table]
 
 if __name__ == "__main__":
     analyser = TextAnalyser('./红楼梦.txt')
