@@ -1,4 +1,4 @@
-Visualization/out/*.html linguist-detectable=false
-TextAnalyser_co/out/*.html linguist-detectable=false
-Final/out/*.html linguist-detectable=false
-Final/out/wuhan_vis_day/*.html linguist-detectable=false
+Visualization/out/*.html linguist-vendored
+TextAnalyser_co/out/*.html linguist-vendored
+Final/out/*.html linguist-vendored
+Final/out/wuhan_vis_day/* linguist-vendored
