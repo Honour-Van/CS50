@@ -31,7 +31,7 @@ for i in range(l-1):
                             hour_sentences.append(line)
                         if line not in day_sentences:
                             day_sentences.append(line)
-        except:
+        finally:
             with open(f'./out/wuhan_hour/{y}-{m}-{d}-{h}.txt', 'w', encoding='utf-8') as fh:
                 for line in hour_sentences:
                     print(line, file=fh)

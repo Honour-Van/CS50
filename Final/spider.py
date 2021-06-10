@@ -51,6 +51,17 @@ def user_input(box, word):
 
 
 def change_time(index):
+    """
+    @Description:
+    used to change start-time and end-time 
+    ---------
+    @Param:
+    `index`: a integer points to one json dict in `date.json`
+    -------
+    @Returns
+    None
+    -------
+    """
     advs = browser.find_element_by_css_selector("a[node-type='advsearch']")
     advs.click()
 
@@ -113,7 +124,7 @@ while True:
                 m = date_list[i]['month']
                 d = date_list[i]['day']
                 h = date_list[i]['hour']
-                with open(f'./out/{y}-{str(int(m)+1)}-{str(d+1)}-{h}.txt', 'w', encoding='utf-8') as f:
+                with open(f'./out/tmp/{y}-{str(int(m)+1)}-{str(d+1)}-{h}.txt', 'w', encoding='utf-8') as f:
                     for item in soup.select('p.txt'):
                         print(item.get_text(), file=f)
 
