@@ -1,4 +1,5 @@
 Visualization/out/*.html linguist-vendored
+TextAnalyser/*.html linguist-vendored
 TextAnalyser_co/out/*.html linguist-vendored
 Final/out/*.html linguist-vendored
 Final/out/wuhan_vis_day/* linguist-vendored
