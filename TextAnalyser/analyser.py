@@ -49,6 +49,9 @@ class TextAnalyser(object):
         """
         with open('syno_dict.json', 'r', encoding='utf-8') as f:
             self.syno_dict = json.load(f)
+    
+    def load_userdict(self,userdict='./user_dict.txt'):
+        jieba.load_userdict(userdict)
 
     def analyse(self, content, minlen=2, maxlen=10, nr=False, show=True):
         """
@@ -185,4 +188,5 @@ class TextAnalyser(object):
 
 if __name__ == "__main__":
     analyser = TextAnalyser('./红楼梦.txt')
+    analyser.load_userdict()
     analyser.start(nameren=True)
