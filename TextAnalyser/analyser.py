@@ -102,8 +102,8 @@ class TextAnalyser(object):
         @param
         @ minlen & maxlen：最小最大字长
         @ bigfile：是否启动大文件读取模式
-        @ ignore：是否弃用忽略列表
-        @ syno：是否弃用同义词替换
+        @ ignore：是否启用忽略列表
+        @ syno：是否启用同义词替换
         @ show：是否呈现结果
         @ nameren：是否启用人名模式
         """
