@@ -70,7 +70,7 @@ class TextAnalyser(object):
             if len(psg_dict):
                 if show: print("word tagging finished")
             minlen = 2
-            maxlen = 3
+            maxlen = 4
 
         for w in word_list:
             # 选出合适长度的
