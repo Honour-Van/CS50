@@ -138,4 +138,5 @@ while True:
     except:
         print("safer awful")
         start_date = fail_list[0]
+        end_date = fail_list[-1]
         continue
