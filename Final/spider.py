@@ -8,8 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.chrome.options import Options
 
-class WeiboSpi(object):
-    def __init__(self) -> None:
+class WeiboSpi():
+    def __init__(self):
         self.date_list = []
         self.hour_list = []
 
@@ -218,6 +218,8 @@ class WeiboSpi(object):
 
 if __name__ == "__main__":
     spider = WeiboSpi()
-    spider.get_cookie()
+    # cookie和日期已经在实例中生成，因而可以直接跳过这两步，并直接登陆
+    # spider.get_cookie()
     # spider.generate_date([2019,12], [2020,12])
-    spider.start("./tmp")
+    # spider.start('./out/wuhan_raw.txt')
+    spider.start("./tmp") # 可以在tmp文件夹下进行简单的交互
