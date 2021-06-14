@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+'''
+@file:sentiment.py
+@author: Honour-Van: fhn037@126.com
+@description:进行语言情感识别
+@version:1.0
+'''
+
+
 from senta import Senta
 import json
 from mytool import progress_bar

@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+'''
+@file:spider.py
+@author: Honour-Van: fhn037@126.com
+@description:爬虫对象类，框架文件
+@version:1.0
+'''
+
+
 import argparse
 from bs4 import BeautifulSoup
 import random
@@ -9,6 +18,14 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.chrome.options import Options
 
 class WeiboSpi():
+    """
+    @Description:微博爬虫类
+    ---------
+    @Param:无参数
+    -------
+    @Returns:返回一个用于爬取指定时间的类
+    -------
+    """
     def __init__(self):
         self.date_list = []
         self.hour_list = []
@@ -35,6 +52,7 @@ class WeiboSpi():
         browser.close()
 
     def generate_date(self, starttime=[], endtime=[], datefile = "./data/date.json", hourfile = "./data/hour.json"):
+        # 生成目标时间节点
         if len(starttime) != 2 or len(endtime) != 2:
             raise Exception("time illegal, please don't use default param")
         
@@ -88,6 +106,7 @@ class WeiboSpi():
         with open(datefile, 'w', encoding='utf-8') as date_file:
             json.dump(self.date_list, date_file)
     def get_date(self) -> list:
+        # 获取已经生成的目标时间节点
         with open('./data/date.json', 'r', encoding='utf-8') as f:
             self.date_list = json.load(f)
         with open('./data/hour.json', 'r', encoding='utf-8') as f:
@@ -95,6 +114,7 @@ class WeiboSpi():
         return len(self.hour_list)
 
     def start(self, output_dir="./out/wuhan_raw"):
+        # 开始爬取
         def user_input(box, word):
             for char in word:
                 box.send_keys(char)

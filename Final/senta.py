@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+'''
+@file:senta.py
+@author: Honour-Van: fhn037@126.com
+@description: 封装好的语言情感识别库
+@version:1.0
+'''
+
+
 from paddlehub import Module
 
 

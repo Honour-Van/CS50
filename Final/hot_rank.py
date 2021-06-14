@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+'''
+@file:hot_rank.py
+@author: Honour-Van: fhn037@126.com
+@description:部署在服务器端的爬虫
+@version:1.0
+'''
+
+
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json
@@ -24,6 +33,7 @@ for cookie in cookies:
         'expires': None
     })
 
+# 反复抓取
 while True:
     try:
         time_stamp = datetime.now().strftime('%m-%d_%H-%M')
