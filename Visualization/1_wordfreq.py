@@ -42,7 +42,7 @@ wordcloud = (
         )
     )
     .add(series_name="词频分析",
-         data_pair=wordfreq_list[:100],
+         data_pair=wordfreq_list[:200],
          word_size_range=[6, 66],
          shape='roundRect',
 
@@ -61,12 +61,12 @@ wordcloud = (
 # --------绘制词云图完成----------------------
 
 # -------绘制词频的柱形图----------------------
-xdata = [x[0] for x in wordfreq_list[:10]]
-ydata = [y[1] for y in wordfreq_list[:10]]
+xdata = [x[0] for x in wordfreq_list[:16]]
+ydata = [y[1] for y in wordfreq_list[:16]]
 bar = (
     Bar(
         init_opts=opts.InitOpts(
-            theme=ThemeType.DARK,
+            theme=ThemeType.DARK
         )
     )
     .add_xaxis(xdata)
@@ -75,7 +75,11 @@ bar = (
         title_opts=opts.TitleOpts(
             title="词频统计",
             subtitle="以红楼梦为例"),
-        toolbox_opts=opts.ToolboxOpts()
+        toolbox_opts=opts.ToolboxOpts(),
+        xaxis_opts=opts.AxisOpts(
+            # is_show=False,
+            axislabel_opts={"rotate":45}
+        ),
     )
 )
 
@@ -107,7 +111,6 @@ pictorialbar = (
             title="词频象形柱图",
             subtitle="以红楼梦为例"
         ),
-        xaxis_opts=opts.AxisOpts(is_show=False),
         yaxis_opts=opts.AxisOpts(
             axistick_opts=opts.AxisTickOpts(is_show=False),
             axisline_opts=opts.AxisLineOpts(
