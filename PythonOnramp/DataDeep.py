@@ -15,24 +15,24 @@ with open('./cnAirport.txt', 'r', encoding='utf-8') as f:
         growth = float(content[3])
         if growth == -100:
             continue
-        val17 = val18 / (1 + growth/100)
+        val17 = round(val18 / (1 + growth/100),1)
         data.append(tuple([content[1], val18, val17, growth]))
     # print(data)
 
 # substask 2：按17年吞吐量降序
 print('\n---------subtask #2: 按照17年吞吐量降序-----------')
 data.sort(key=lambda X: X[2], reverse=True)
-for i in range(len(data)):
-    print(i+1, data[i][0], data[i][1], data[i][2], sep=',')
+for i,item in enumerate(data):
+	print(i+1,item[0], item[1], item[2], sep=',')
 
 # subtask 3：按增量降序
 print('\n---------subtask #3: 按照吞吐量增量降序-----------')
 data.sort(key=lambda X: X[1]-X[2], reverse=True)
-for i in range(len(data)):
-    print(i+1, data[i][0], data[i][1], data[i][2], sep=',')
+for i,item in enumerate(data):
+	print(i+1,item[0], item[1], item[2], sep=',')
 
 # subtask 4: 按增长率降序
 print('\n---------subtask #4: 按照吞吐量增长率降序-----------')
 data.sort(key=lambda X: X[3], reverse=True)
-for i in range(len(data)):
-    print(i+1, data[i][0], data[i][1], data[i][2], sep=',')
+for i,item in enumerate(data):
+	print(i+1,item[0], item[1], item[2], sep=',')
