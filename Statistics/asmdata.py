@@ -70,6 +70,7 @@ for item in type_dict.keys():
 
 df4.insert(1, 'Numbers', [inst_dict4[x] for x in df4.iloc[:, 0]])
 print(df4)
+df4.to_excel(writer, 'StatisticsType', index=False)
 
 # 准备绘图
 plt.rcParams['font.sans-serif'] = ['KaiTi']  # 指定默认字体
